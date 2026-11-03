@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>점심 메뉴 추천</title>
+  <style>
+    body { font-family: system-ui, -apple-system, "Malgun Gothic", sans-serif; margin: 0; background: #f6f8fa; color: #1f2328; }
+    header { background: #1d6fe0; color: #fff; padding: 24px 20px; }
+    header h1 { margin: 0; font-size: 26px; }
+    header p { margin: 6px 0 0; opacity: .9; }
+    main { max-width: 860px; margin: 0 auto; padding: 20px; }
+    .controls { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 16px; }
+    .controls label { font-size: 15px; }
+    .controls input { width: 110px; padding: 6px 8px; font-size: 15px; }
+    button { background: #1d6fe0; color: #fff; border: 0; border-radius: 6px; padding: 8px 14px; font-size: 15px; cursor: pointer; }
+    #pick { margin: 0 0 16px; font-size: 18px; font-weight: bold; min-height: 24px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+    .card { background: #fff; border: 1px solid #d0d7de; border-radius: 8px; padding: 14px; }
+    .card h2 { margin: 0 0 6px; font-size: 19px; }
+    .meta { color: #59636e; font-size: 14px; }
+    .badge { display: inline-block; margin-top: 8px; margin-right: 4px; padding: 2px 8px; border-radius: 10px; font-size: 12px; background: #ddf4ff; color: #0969da; }
+    .badge.delivery { background: #dafbe1; color: #1a7f37; }
+    .empty { color: #59636e; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>점심 메뉴 추천</h1>
+    <p>오늘 점심, 5분 안에 정해 봅시다.</p>
+  </header>
+  <main>
+    <div class="controls">
+      <label>예산(원) <input id="budget" type="number" placeholder="예: 10000"></label>
+      <label>거리(m) <input id="distance" type="number" placeholder="예: 500"></label>
+      <button id="random">아무거나 골라 줘</button>
+    </div>
+    <p id="pick"></p>
+    <div id="list" class="grid"></div>
+  </main>
+  <script>
+    let menus = [];
+    const list = document.getElementById("list");
+    const won = (n) => n.toLocaleString("ko-KR") + "원";
+
+    function filtered() {
+      const b = Number(document.getElementById("budget").value) || Infinity;
+      const d = Number(document.getElementById("distance").value) || Infinity;
+      return menus.filter((m) => m.price <= b && m.distance <= d);
+    }
+
+    function render() {
+      const items = filtered();
+      if (items.length === 0) { list.innerHTML = '<p class="empty">조건에 맞는 메뉴가 없습니다.</p>'; return; }
+      list.innerHTML = items.map((m) => `
+        <div class="card">
+          <h2>${m.name}</h2>
+          <div class="meta">${m.category}  |  ${won(m.price)}  |  ${m.distance}m</div>
+          ${m.solo ? '<span class="badge">혼밥 가능</span>' : ""}
+          ${m.delivery ? '<span class="badge delivery">배달 가능</span>' : ""}
+        </div>`).join("");
+    }
+
+    document.getElementById("budget").addEventListener("input", render);
+    document.getElementById("distance").addEventListener("input", render);
+    document.getElementById("random").addEventListener("click", () => {
+      const items = filtered();
+      document.getElementById("pick").textContent = items.length
+        ? "오늘의 추천: " + items[Math.floor(Math.random() * items.length)].name
+        : "조건에 맞는 메뉴가 없습니다.";
+    });
+
+    fetch("menus.json", { cache: "no-store" }).then((r) => r.json()).then((data) => { menus = data; render(); });
+  </script>
+</body>
+</html>
