@@ -1,5 +1,5 @@
 [
-  { "name": "김치찌개", "category": "한식", "price": 9000, "distance": 300, "solo": true },
+  { "name": "김치찌개", "category": "한식", "price": 9500, "distance": 300, "solo": true },
   { "name": "짜장면", "category": "중식", "price": 8000, "distance": 450, "solo": false },
   { "name": "돈카츠", "category": "일식", "price": 11000, "distance": 600, "solo": false },
   { "name": "샐러드볼", "category": "양식", "price": 10500, "distance": 200, "solo": true },
