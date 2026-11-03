@@ -4,6 +4,6 @@
   { "name": "돈카츠", "category": "일식", "price": 11000, "distance": 600, "solo": false },
   { "name": "샐러드볼", "category": "양식", "price": 10500, "distance": 200, "solo": true },
   { "name": "쌀국수", "category": "아시안", "price": 9500, "distance": 700, "solo": false },
-  { "name": "순두부찌개", "category": "한식", "price": 8500, "distance": 350, "solo": true }
+  { "name": "순두부찌개", "category": "한식", "price": 8500, "distance": 350, "solo": true },
   { "name": "비빔밥", "category": "한식", "price": 9000, "distance": 250, "solo": true }
 ]
